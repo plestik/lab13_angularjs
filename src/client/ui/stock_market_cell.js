@@ -6,30 +6,28 @@ var stockMarketCell = module.exports = angular.module("stockMarketCell", []);
 stockMarketCell.directive("stockMarketCell", function() {
 	return {
 		restrict: "A",
-		transclude: false,
 		scope: {
 			value: '=*'
 		},
-		link: function(scope, element) {
-			scope.$watch("value", function() {
-				var target = new RenderTarget(element);
-				scope.value.renderTo(target);
+		replace: true,
+		template: '<td ng-class="{\'negative\': vals.negative }" title="{{getTitle()}}">' +
+			'<span ng-show="!vals.invalid">{{vals.text}}</span>' + 
+			'<img ng-src="/invalid_dollars.png" ng-if="vals.invalid"/>' + 
+		'</td>',
+		link: function(scope/*, element, attrs*/ ) {
+			
+			scope.vals = {};
+			
+			scope.value.renderTo({
+				render: function ( values ) {
+					scope.vals = angular.copy(values);
+				}
 			});
+			
+			scope.getTitle = function ( ) {
+				return scope.vals.invalid ? scope.vals.tooltip : '';
+			};
+			
 		}
 	};
 });
-
-function RenderTarget(element) {
-	this._element = element;
-}
-
-RenderTarget.prototype.render = function render(values) {
-	if (values.negative) this._element.addClass("negative");
-	if (values.invalid) {
-		this._element.html("<img src='/invalid_dollars.png' />");
-		this._element.attr("title", values.tooltip);
-	}
-	else {
-		this._element.text(values.text);
-	}
-};
