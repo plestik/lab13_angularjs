@@ -9,21 +9,27 @@
 	stockMarketRow.directive("stockMarketRow", function() {
 		return {
 			restrict: "A",
-			transclude: false,
 			scope: {
 				value: "="
 			},
 			template:
 				'<tr>' +
-					'<td stock-market-cell value="value.year()"></td>' +
-					'<td stock-market-cell value="value.startingBalance()"></td>' +
-					'<td stock-market-cell value="value.startingCostBasis()"></td>' +
-					'<td stock-market-cell value="value.totalSellOrders().flipSign()"></td>' +
-					'<td stock-market-cell value="value.capitalGainsTaxIncurred().flipSign()"></td>' +
-					'<td stock-market-cell value="value.growth()"></td>' +
-					'<td stock-market-cell value="value.endingBalance()"></td>' +
+					'<td stock-market-cell ng-repeat="val in values" value="val"></td>' + 
 				'</tr>',
-			replace: true
+			replace: true,
+			link: function ( scope, element, attrs ) {
+				
+				scope.values = [
+					scope.value.year(),
+					scope.value.startingBalance(),
+					scope.value.startingCostBasis(),
+					scope.value.totalSellOrders().flipSign(),
+					scope.value.capitalGainsTaxIncurred().flipSign(),
+					scope.value.growth(),
+					scope.value.endingBalance()
+				];
+				
+			}
 		};
 	});
 })();
