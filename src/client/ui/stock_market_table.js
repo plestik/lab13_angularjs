@@ -18,14 +18,14 @@
 			scope: {
 				projection: "="
 			},
-			controller: [ "$scope", function($scope) {
-				$scope.$watch("projection", function() {
-					$scope.years = [];
-				  for (var i = 0; i < ($scope.projection.numberOfYears()); i++) {
-					  $scope.years.push($scope.projection.getYearOffset(i));
-			    }
+			link: function ( scope, element, attrs ) {
+				scope.$watch("projection", function() {
+					scope.years = [];
+				  	for (var i = 0; i < (scope.projection.numberOfYears()); i++) {
+					  	scope.years.push(scope.projection.getYearOffset(i));
+			    	}
 				});
-			} ],
+			},
 			template:
 				'<table class="stockmarket">' +
 	        '<thead>' +
