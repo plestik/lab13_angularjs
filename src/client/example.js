@@ -1,4 +1,4 @@
-// Copyright (c) 2014 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
+	// Copyright (c) 2014 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
 (function() {
 	"use strict";
 
@@ -19,9 +19,7 @@
 		$scope.projection = projectionFor($scope.configuration);
 
 		$scope.configuration.onChange(function() {
-			$scope.$applyAsync(function() {                             // this call is not tested
-				$scope.projection = projectionFor($scope.configuration);
-			});
+			$scope.projection = projectionFor($scope.configuration);
 		});
 	}]);
 
