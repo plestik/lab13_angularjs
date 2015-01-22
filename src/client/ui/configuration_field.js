@@ -13,43 +13,33 @@
 			scope: {
 				value: "="
 			},
-			controller: [ "$scope", function($scope) {
-				$scope.$watch("value", function() {
-					render();
+			link: function ( scope, element, attrs ) {
+				
+				scope.values = {};
+				scope.input = '';
+				
+				scope.$watch('value', function ( ) {
+					scope.value.renderTo({
+						render: function ( values ) {
+							scope.values = angular.copy(values);
+						}
+					});	
+					scope.input = scope.value.getUserText();
 				});
-
-				$scope.$watch("renderedText", function() {
-					$scope.value = new UserEnteredDollars($scope.renderedText);
-					render();
-				});
-
-				$scope.setText = function(newString) {
-					$scope.renderedText = newString;
+				
+				scope.onInputChange = function ( ) {
+					scope.value = new UserEnteredDollars(scope.input);	
 				};
-
-				function render() {
-					var target = new RenderTarget($scope);
-					$scope.value.renderTo(target);
-				}
-			} ],
+				
+			},
 			template:
 				'<div class="config">' +
 				' <label ng-transclude></label>' +
-				' <input type="text" ng-class="invalidClass" ng-model="renderedText" title="{{title}}">' +
+				' <input type="text" ng-class="{ invalid: values.invalid }" ng-model="input" ng-change="onInputChange()" title="{{values.tooltip}}">' +
 				'</div>',
 			replace: true
 		};
 
 	});
-
-	function RenderTarget(scope) {
-		this._scope = scope;
-	}
-
-	RenderTarget.prototype.render = function render(values) {
-		this._scope.renderedText = this._scope.value.getUserText();
-		this._scope.invalidClass = values.invalid ? "invalid" : "";
-		this._scope.title = values.tooltip;
-	};
 
 })();
